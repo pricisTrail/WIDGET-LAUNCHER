@@ -21,7 +21,7 @@
       <section class="settings-window" id="settings-panel" hidden>
         <header class="settings-header">
           <h2>Widget Settings</h2>
-          <p>Triple tap the widget to open this window.</p>
+          <p>Configure appearance, schedule, and behavior.</p>
         </header>
 
         <form id="settings-form" class="settings-form">
@@ -117,6 +117,12 @@
                 <input type="time" data-override-end="0" aria-label="Sunday end" />
               </div>
             </div>
+          </section>
+
+          <section class="settings-card">
+            <h3>Widget Control</h3>
+            <p class="hint">Terminate the currently running widget process.</p>
+            <button id="terminate-widget" type="button" class="danger">Terminate Widget</button>
           </section>
 
           <div class="actions">

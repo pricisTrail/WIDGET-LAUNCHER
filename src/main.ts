@@ -60,6 +60,7 @@ const MAIN_WINDOW_LABEL = "main";
 const SETTINGS_WINDOW_LABEL = "settings";
 const SETTINGS_REFRESH_EVENT = "settings-window:refresh";
 const WIDGET_RESTART_EVENT = "widget:restart";
+const TERMINATE_WIDGET_COMMAND = "terminate_widget";
 const AUTOSTART_ENABLE_COMMAND = "plugin:autostart|enable";
 const AUTOSTART_DISABLE_COMMAND = "plugin:autostart|disable";
 const AUTOSTART_IS_ENABLED_COMMAND = "plugin:autostart|is_enabled";
@@ -362,6 +363,7 @@ const weekendStartInput = queryElement<HTMLInputElement>("#weekend-start");
 const weekendEndInput = queryElement<HTMLInputElement>("#weekend-end");
 const resetButton = queryElement<HTMLButtonElement>("#reset-default");
 const closeSettingsButton = queryElement<HTMLButtonElement>("#close-settings");
+const terminateWidgetButton = queryElement<HTMLButtonElement>("#terminate-widget");
 const statusElement = queryElement<HTMLElement>("#status-message");
 
 const resizeHandleElements = Array.from(document.querySelectorAll<HTMLElement>(".resize-handle"));
@@ -511,6 +513,7 @@ function render(): void {
   timeElement.textContent = timeFormatter(settings).format(now);
   percentElement.textContent = `${Math.round(progress)}%`;
   percentElement.hidden = !settings.showPercent;
+  displayElement.classList.toggle("percent-hidden", !settings.showPercent);
 
   windowLabelElement.textContent = `${minutesToTime(activeSchedule.window.startMinutes)} - ${minutesToTime(activeSchedule.window.endMinutes)}`;
 }
@@ -605,6 +608,21 @@ closeSettingsButton.addEventListener("click", () => {
   void appWindow.close();
 });
 
+terminateWidgetButton.addEventListener("click", async () => {
+  if (!isSettingsWindow) {
+    return;
+  }
+
+  terminateWidgetButton.disabled = true;
+  setStatus("Terminating widget...");
+  try {
+    await invoke<void>(TERMINATE_WIDGET_COMMAND);
+  } catch {
+    terminateWidgetButton.disabled = false;
+    setStatus("Unable to terminate widget.", 2200);
+  }
+});
+
 const isResizeDirection = (value: string): value is ResizeDirection =>
   (RESIZE_DIRECTIONS as readonly string[]).includes(value);
 
@@ -697,6 +715,5 @@ if (!isSettingsWindow) {
 if (isSettingsWindow) {
   setStatus("Save to apply and restart the widget.", 2400);
 } else {
-  setStatus("Triple tap to open settings.", 2200);
   tick();
 }

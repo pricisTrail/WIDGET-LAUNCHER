@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/styles.css" />
+    <title>Widget Launcher</title>
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <main class="widget">
+      <section
+        class="display"
+        id="display-hitbox"
+        aria-label="Current time and day progress"
+      >
+        <span id="clock-time" class="time" aria-label="Current local time">--:--</span>
+        <span id="progress-percent" class="progress-percent">0%</span>
+      </section>
+
+      <section class="settings-window" id="settings-panel" hidden>
+        <header class="settings-header">
+          <h2>Widget Settings</h2>
+          <p>Triple tap the widget to open this window.</p>
+        </header>
+
+        <form id="settings-form" class="settings-form">
+          <section class="settings-card">
+            <h3>Theme</h3>
+            <label class="row">
+              <span>Color theme</span>
+              <select id="theme-select">
+                <option value="midnight">Midnight Blue</option>
+                <option value="dark-purple">Dark Purple</option>
+                <option value="forest">Forest Green</option>
+                <option value="rose">Rose</option>
+                <option value="amber">Amber</option>
+                <option value="slate">Slate</option>
+              </select>
+            </label>
+          </section>
+
+          <section class="settings-card">
+            <h3>Time Format</h3>
+            <div class="radio-group">
+              <label><input id="time-format-12" type="radio" name="time-format" value="12h" checked /> 12-hour</label>
+              <label><input id="time-format-24" type="radio" name="time-format" value="24h" /> 24-hour</label>
+            </div>
+            <label class="check-row">
+              <input id="show-seconds" type="checkbox" />
+              <span>Show seconds</span>
+            </label>
+          </section>
+
+          <section class="settings-card">
+            <h3>Day Progress</h3>
+            <label class="check-row">
+              <input id="show-percent" type="checkbox" checked />
+              <span>Show percentage on widget</span>
+            </label>
+            <label class="check-row">
+              <input id="run-on-startup" type="checkbox" />
+              <span>Run on startup</span>
+            </label>
+            <p class="progress-window">Active window: <span id="progress-window">09:00 - 18:00</span></p>
+          </section>
+
+          <section class="settings-card">
+            <h3>Day Schedule</h3>
+            <div class="schedule-grid">
+              <span>Weekdays</span>
+              <input id="weekday-start" type="time" required aria-label="Weekday start time" />
+              <input id="weekday-end" type="time" required aria-label="Weekday end time" />
+              <span>Weekend</span>
+              <input id="weekend-start" type="time" required aria-label="Weekend start time" />
+              <input id="weekend-end" type="time" required aria-label="Weekend end time" />
+            </div>
+          </section>
+
+          <section class="settings-card">
+            <h3>Day Overrides</h3>
+            <p class="hint">Enable a day to override weekday/weekend schedule.</p>
+            <div class="overrides">
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="1" /> Mon</label>
+                <input type="time" data-override-start="1" aria-label="Monday start" />
+                <input type="time" data-override-end="1" aria-label="Monday end" />
+              </div>
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="2" /> Tue</label>
+                <input type="time" data-override-start="2" aria-label="Tuesday start" />
+                <input type="time" data-override-end="2" aria-label="Tuesday end" />
+              </div>
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="3" /> Wed</label>
+                <input type="time" data-override-start="3" aria-label="Wednesday start" />
+                <input type="time" data-override-end="3" aria-label="Wednesday end" />
+              </div>
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="4" /> Thu</label>
+                <input type="time" data-override-start="4" aria-label="Thursday start" />
+                <input type="time" data-override-end="4" aria-label="Thursday end" />
+              </div>
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="5" /> Fri</label>
+                <input type="time" data-override-start="5" aria-label="Friday start" />
+                <input type="time" data-override-end="5" aria-label="Friday end" />
+              </div>
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="6" /> Sat</label>
+                <input type="time" data-override-start="6" aria-label="Saturday start" />
+                <input type="time" data-override-end="6" aria-label="Saturday end" />
+              </div>
+              <div class="override-row">
+                <label><input type="checkbox" data-override-enabled="0" /> Sun</label>
+                <input type="time" data-override-start="0" aria-label="Sunday start" />
+                <input type="time" data-override-end="0" aria-label="Sunday end" />
+              </div>
+            </div>
+          </section>
+
+          <div class="actions">
+            <button type="submit">Save</button>
+            <button id="reset-default" type="button" class="secondary">Reset</button>
+            <button id="close-settings" type="button" class="secondary">Close</button>
+          </div>
+        </form>
+      </section>
+      <p id="status-message" class="status" aria-live="polite"></p>
+
+      <div class="resize-handle n" data-direction="North" aria-hidden="true"></div>
+      <div class="resize-handle s" data-direction="South" aria-hidden="true"></div>
+      <div class="resize-handle e" data-direction="East" aria-hidden="true"></div>
+      <div class="resize-handle w" data-direction="West" aria-hidden="true"></div>
+      <div class="resize-handle ne" data-direction="NorthEast" aria-hidden="true"></div>
+      <div class="resize-handle nw" data-direction="NorthWest" aria-hidden="true"></div>
+      <div class="resize-handle se" data-direction="SouthEast" aria-hidden="true"></div>
+      <div class="resize-handle sw" data-direction="SouthWest" aria-hidden="true"></div>
+    </main>
+  </body>
+</html>

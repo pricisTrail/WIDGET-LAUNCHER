@@ -1,0 +1,12 @@
+{
+  "tasksync": {
+    "type": "stdio",
+    "command": "npx",
+    "args": [
+      "-y",
+      "tasksync-mcp@latest",
+      "/path/to/directory",
+      "--timeout=300000"
+    ]
+  }
+}
